@@ -1,0 +1,9 @@
+services:
+  collect-gde-data:
+    container_name: collect-gde-data
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3335:3335"
+    env_file:
+      - .env
