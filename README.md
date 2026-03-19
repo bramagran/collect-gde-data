@@ -197,3 +197,11 @@ Cada registro contém:
 - O GDE4000 retorna apenas 1 registro por requisição, tornando a leitura em massa lenta
 - A sincronização completa de ~1600 registros leva aproximadamente 5 minutos
 - Recomenda-se usar a rota `/demanda` (banco de dados) para consultas frequentes
+
+### Buffer circular do medidor (limitação de hardware)
+
+O GDE4000 possui memória interna para aproximadamente **60 dias** de histórico (intervalos de 15 minutos). Quando a memória enche, o medidor opera como um buffer circular: o registro mais antigo é apagado para dar lugar ao novo.
+
+**Consequência:** se o serviço de coleta ficar offline por mais de 60 dias, os registros do período de inatividade serão sobrescritos no medidor e **não poderão ser recuperados**. Não há como contornar essa limitação por software — ela é inerente ao hardware.
+
+A sincronização incremental detecta registros novos comparando a `data_hora` do último registro salvo no banco com a do último registro disponível no medidor. Isso garante funcionamento correto mesmo com o buffer circular ativo, desde que a coleta ocorra dentro da janela de 60 dias.

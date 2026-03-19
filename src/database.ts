@@ -26,7 +26,7 @@ export interface DemandaDB {
   created_at: Date;
 }
 
-function parseDataHora(dataStr: string): Date {
+export function parseDataHora(dataStr: string): Date {
   // Formato: "DD/MM/YYYY HH:MM"
   const [dataPart, horaPart] = dataStr.split(' ');
   const [dia, mes, ano] = dataPart.split('/').map(Number);
@@ -78,6 +78,11 @@ export async function insertDemandRecords(records: DemandRecord[]): Promise<numb
 export async function getLastRegistro(): Promise<number> {
   const result = await pool.query('SELECT MAX(registro) as max_registro FROM demanda');
   return result.rows[0].max_registro || 0;
+}
+
+export async function getLastDataHora(): Promise<Date | null> {
+  const result = await pool.query('SELECT MAX(data_hora) as max_data FROM demanda');
+  return result.rows[0].max_data || null;
 }
 
 export async function getDemandaByDateRange(
