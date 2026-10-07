@@ -1,5 +1,5 @@
 # ---------- build ----------
-FROM node:20-alpine AS build
+FROM node:20.20.1-alpine AS build
 WORKDIR /app
 
 COPY package*.json ./
@@ -9,7 +9,7 @@ COPY . .
 RUN npm run build
 
 # ---------- runtime ----------
-FROM node:20-alpine
+FROM node:20.20.1-alpine
 WORKDIR /app
 
 COPY package*.json ./
